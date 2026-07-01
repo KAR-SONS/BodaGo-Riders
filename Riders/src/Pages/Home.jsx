@@ -12,7 +12,8 @@ const STEPS_CUSTOMER = [
 const STEPS_RIDER = [
   { step: '1', title: 'Sign Up ', desc: 'Create your account on this site in minutes' },
   { step: '2', title: 'Complete Your Profile', desc: 'Add your details, photo and ID for verification' },
-  { step: '3', title: 'Get Customers', desc: 'Once approved, customers in your area will find you' },
+  { step: '3', title: 'Pay Subscription', desc: 'We do not charge riders by commission only a monthly fee of ksh 100' },
+  { step: '4', title: 'Get Customers', desc: 'Once approved, customers in your area will find you' },
 ]
 
 const FEATURES = [

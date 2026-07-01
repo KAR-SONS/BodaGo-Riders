@@ -3,11 +3,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
-export default function Signup() {
+export default function Login() {
   const navigate = useNavigate()
-  const { signUp } = useAuth()
+  const { signIn } = useAuth()
 
-  const [form, setForm] = useState({ email: '', password: '', confirm: '' })
+  const [form, setForm] = useState({ email: '', password: '' })
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -21,21 +21,12 @@ export default function Signup() {
     e.preventDefault()
     setError('')
 
-    if (!form.email || !form.password || !form.confirm) {
+    if (!form.email || !form.password) {
       return setError('Please fill in all fields')
     }
 
-    if (form.password.length < 6) {
-      return setError('Password must be at least 6 characters')
-    }
-
-    if (form.password !== form.confirm) {
-      return setError('Passwords do not match')
-    }
-
     setLoading(true)
-
-    const { error } = await signUp(form.email, form.password)
+    const { error } = await signIn(form.email, form.password)
 
     if (error) {
       setError(error.message)
@@ -43,27 +34,23 @@ export default function Signup() {
       return
     }
 
-    navigate('/setup')
+    navigate('/dashboard')
   }
 
   return (
     <div className="min-h-screen bg-[#111111] flex items-center justify-center px-6 py-20">
       <div className="w-full max-w-md">
 
-        {/* Logo */}
         <Link to="/" className="flex items-center gap-3 justify-center mb-10">
           <div className="w-10 h-10 rounded-full bg-[#FF5500] flex items-center justify-center font-extrabold text-xl">
             B
           </div>
-          <span className="font-bold text-2xl text-white">BodaGo</span>
+          <span className="font-bold text-2xl">BodaGo</span>
         </Link>
 
-        {/* Card */}
         <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-8">
-          <h1 className="text-2xl font-bold mb-1 text-white">Join as a Rider</h1>
-          <p className="text-gray-400 text-sm mb-8">
-            Create your account to get listed on BodaGo
-          </p>
+          <h1 className="text-2xl font-bold mb-1">Welcome back</h1>
+          <p className="text-gray-400 text-sm mb-8">Sign in to your rider account</p>
 
           {error && (
             <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-sm rounded-xl px-4 py-3 mb-6">
@@ -72,8 +59,6 @@ export default function Signup() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-
-            {/* Email */}
             <div>
               <label className="text-sm text-gray-400 mb-2 block">Email Address</label>
               <div className="relative">
@@ -89,7 +74,6 @@ export default function Signup() {
               </div>
             </div>
 
-            {/* Password */}
             <div>
               <label className="text-sm text-gray-400 mb-2 block">Password</label>
               <div className="relative">
@@ -99,7 +83,7 @@ export default function Signup() {
                   name="password"
                   value={form.password}
                   onChange={handleChange}
-                  placeholder="Min 6 characters"
+                  placeholder="Your password"
                   className="w-full bg-[#2A2A2A] border border-[#3A3A3A] rounded-xl px-4 py-3 pl-11 pr-11 text-white placeholder-gray-600 focus:outline-none focus:border-[#FF5500] transition-colors"
                 />
                 <button
@@ -112,38 +96,21 @@ export default function Signup() {
               </div>
             </div>
 
-            {/* Confirm Password */}
-            <div>
-              <label className="text-sm text-gray-400 mb-2 block">Confirm Password</label>
-              <div className="relative">
-                <Lock size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="confirm"
-                  value={form.confirm}
-                  onChange={handleChange}
-                  placeholder="Repeat your password"
-                  className="w-full bg-[#2A2A2A] border border-[#3A3A3A] rounded-xl px-4 py-3 pl-11 text-white placeholder-gray-600 focus:outline-none focus:border-[#FF5500] transition-colors"
-                />
-              </div>
-            </div>
-
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-3 bg-[#FF5500] hover:bg-[#E04A00] disabled:opacity-50 disabled:cursor-not-allowed transition-colors py-3 rounded-xl font-bold text-lg mt-2"
+              className="w-full flex items-center justify-center gap-3 bg-[#FF5500] hover:bg-[#E04A00] disabled:opacity-50 disabled:cursor-not-allowed transition-colors py-3 rounded-xl font-bold text-lg"
             >
-              {loading ? 'Creating account...' : 'Create Account'}
+              {loading ? 'Signing in...' : 'Sign In'}
               {!loading && <ArrowRight size={20} />}
             </button>
           </form>
         </div>
 
-        {/* Login link */}
         <p className="text-center text-gray-500 text-sm mt-6">
-          Already have an account?{' '}
-          <Link to="/login" className="text-[#FF5500] hover:underline font-medium">
-            Sign in
+          Don't have an account?{' '}
+          <Link to="/signup" className="text-[#FF5500] hover:underline font-medium">
+            Sign up free
           </Link>
         </p>
 

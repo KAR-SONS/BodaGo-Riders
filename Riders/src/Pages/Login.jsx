@@ -45,11 +45,11 @@ export default function Login() {
           <div className="w-10 h-10 rounded-full bg-[#FF5500] flex items-center justify-center font-extrabold text-xl">
             B
           </div>
-          <span className="font-bold text-2xl">BodaGo</span>
+          <span className="font-bold text-2xl text-white">BodaGo</span>
         </Link>
 
         <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-8">
-          <h1 className="text-2xl font-bold mb-1">Welcome back</h1>
+          <h1 className="text-2xl font-bold mb-1 text-white">Welcome back</h1>
           <p className="text-gray-400 text-sm mb-8">Sign in to your rider account</p>
 
           {error && (

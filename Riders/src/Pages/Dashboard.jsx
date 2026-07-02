@@ -15,17 +15,33 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [toggling, setToggling] = useState(false)
   const [status, setStatus] = useState('') // pending | approved | rejected
+  const [paying, setPaying] = useState(false)
+  const [payError, setPayError] = useState('')
+  const [paySuccess, setPaySuccess] = useState(false)
 
   useEffect(() => {
     if (!user) return navigate('/login')
     fetchRiderData()
   }, [user])
 
+  // Payment verification effect must run consistently on every render
+  // Keep this above any early returns that could change hook order.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const reference = params.get('reference')
+
+    if (reference) {
+      verifyPayment(reference)
+      // Clean URL
+      window.history.replaceState({}, '', '/dashboard')
+    }
+  }, [])
+
   async function fetchRiderData() {
     setLoading(true)
 
     // First check riders_approval table
-    const { data: approval } = await supabase
+  const { data: approval } = await supabase
       .from('riders_approval')
       .select('*, areas(name)')
       .eq('email', user.email)
@@ -50,6 +66,32 @@ export default function Dashboard() {
     setLoading(false)
   }
 
+  async function handlePay() {
+    setPaying(true)
+    setPayError('')
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/payment/initialize`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: user.email,
+          name: rider.name,
+        }),
+      })
+
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+
+      // Redirect to Paystack payment page
+      window.location.href = data.authorization_url
+
+    } catch (err) {
+      setPayError(err.message || 'Something went wrong')
+      setPaying(false)
+    }
+  }
+
   async function handleSignOut() {
     await signOut()
     navigate('/')
@@ -61,6 +103,23 @@ export default function Dashboard() {
         <div className="w-10 h-10 border-2 border-[#FF5500] border-t-transparent rounded-full animate-spin" />
       </div>
     )
+  }
+
+
+
+  async function verifyPayment(reference) {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/payment/verify/${reference}`
+      )
+      const data = await res.json()
+      if (data.success) {
+        setPaySuccess(true)
+        fetchRiderData() // Refresh to show updated subscription
+      }
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   if (!rider) {
@@ -208,6 +267,72 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+
+        {status === 'approved' && (
+          <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-6 mb-6">
+            <h3 className="font-bold text-lg mb-1 text-white">Subscription</h3>
+            <p className="text-gray-400 text-md mb-4">Ksh 100/month to stay listed on BodaGo</p>
+
+            {/* Active */}
+            {rider?.subscription_status === 'active' && (
+              <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4 mb-4">
+                <div className="flex items-center gap-2 text-green-400 font-semibold mb-1">
+                  <CheckCircle size={16} />
+                  Subscription Active
+                </div>
+                <p className="text-green-400/70 text-xs">
+                  Expires:{' '}
+                  {new Date(rider.subscription_expires_at).toLocaleDateString('en-KE', {
+                    day: 'numeric', month: 'long', year: 'numeric',
+                  })}
+                </p>
+              </div>
+            )}
+
+            {/* Inactive */}
+            {rider?.subscription_status !== 'active' && (
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mb-4">
+                <div className="flex items-center gap-2 text-yellow-400 font-semibold mb-1">
+                  <AlertCircle size={16} />
+                  No Active Subscription
+                </div>
+                <p className="text-yellow-400/70 text-sm">
+                  Pay Ksh 100 to get listed and start receiving customers
+                </p>
+              </div>
+            )}
+
+            {/* Success message after redirect */}
+            {paySuccess && (
+              <div className="bg-green-500/10 border border-green-500/30 text-green-400 text-sm rounded-xl px-4 py-3 mb-4">
+                Payment successful! Your subscription is now active.
+              </div>
+            )}
+
+            {payError && (
+              <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-sm rounded-xl px-4 py-3 mb-4">
+                {payError}
+              </div>
+            )}
+
+            <button
+              onClick={handlePay}
+              disabled={paying || rider?.subscription_status === 'active'}
+              className="w-full flex items-center justify-center gap-3 bg-[#FF5500] hover:bg-[#E04A00] disabled:opacity-50 disabled:cursor-not-allowed transition-colors py-3 rounded-xl font-bold"
+            >
+              {paying ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Redirecting...
+                </>
+              ) : rider?.subscription_status === 'active' ? (
+                'Subscription Active'
+              ) : (
+                'Pay Ksh 100 via MPesa'
+              )}
+            </button>
+          </div>
+        )}
 
         {/* Contact Support */}
         <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-5 flex items-center justify-between">

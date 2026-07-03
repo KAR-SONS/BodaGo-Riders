@@ -56,7 +56,7 @@ export default function AdminLogin() {
               className="w-full flex items-center justify-center gap-3 bg-[#FF5500] hover:bg-[#E04A00] transition-colors py-3 rounded-xl font-bold"
             >
               Access Panel
-              <ArrowRight size={18} />
+              <ArrowRight size={17} />
             </button>
           </form>
         </div>

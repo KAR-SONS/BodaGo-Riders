@@ -175,6 +175,13 @@ export default function Home() {
             Sign Up
             <ChevronRight size={18} />
           </Link>
+          <p className="text-gray-500 text-sm text-center mt-3">
+            📱 Already registered?{' '}
+            <a href="/login" className="text-[#00D4FF] hover:underline">
+              Open the rider app
+            </a>
+            {' '}and install it to your home screen
+          </p>
         </div>
       </section>
 

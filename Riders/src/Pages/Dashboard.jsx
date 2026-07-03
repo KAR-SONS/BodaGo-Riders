@@ -18,11 +18,31 @@ export default function Dashboard() {
   const [paying, setPaying] = useState(false)
   const [payError, setPayError] = useState('')
   const [paySuccess, setPaySuccess] = useState(false)
+  const [installPrompt, setInstallPrompt] = useState(null)
+  const [showInstallBanner, setShowInstallBanner] = useState(false)
+
 
   useEffect(() => {
     if (!user) return navigate('/login')
     fetchRiderData()
   }, [user])
+
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault()
+      setInstallPrompt(e)
+      setShowInstallBanner(true)
+    })
+  }, [])
+
+  async function handleInstall() {
+    if (!installPrompt) return
+    await installPrompt.prompt()
+    const result = await installPrompt.userChoice
+    if (result.outcome === 'accepted') {
+      setShowInstallBanner(false)
+    }
+  }
 
   // Payment verification effect must run consistently on every render
   // Keep this above any early returns that could change hook order.
@@ -169,6 +189,31 @@ export default function Dashboard() {
             Sign Out
           </button>
         </div>
+
+        {showInstallBanner && (
+          <div className="bg-[#FF5500] rounded-2xl p-4 flex items-center justify-between gap-4 mb-6">
+            <div>
+              <p className="font-bold text-sm">Install BodaGo App</p>
+              <p className="text-white/70 text-xs mt-0.5">
+                Add to your home screen for quick daily access
+              </p>
+            </div>
+            <div className="flex gap-2 shrink-0">
+              <button
+                onClick={() => setShowInstallBanner(false)}
+                className="text-white/70 text-sm px-3 py-1.5 rounded-lg hover:text-white"
+              >
+                Later
+              </button>
+              <button
+                onClick={handleInstall}
+                className="bg-white text-[#FF5500] font-bold text-sm px-4 py-1.5 rounded-lg"
+              >
+                Install
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Status Banner */}
         {status === 'pending' && (

@@ -10,8 +10,9 @@ const WORKING_HOURS = [
   '6am - 10pm',
   '7am - 8pm',
   '8am - 6pm',
+  '7pm - 5am',
+  'Night shift',
   '24 Hours',
-  'Custom',
 ]
 
 export default function ProfileSetup() {
@@ -38,7 +39,6 @@ export default function ProfileSetup() {
     area_id: '',
     service_type: [],
     working_hours: '',
-    custom_hours: '',
   })
 
   // Files
@@ -296,12 +296,13 @@ export default function ProfileSetup() {
                   className="w-full bg-[#2A2A2A] border border-[#3A3A3A] rounded-xl px-4 py-3 pl-11 text-white placeholder-gray-600 focus:outline-none focus:border-[#FF5500] transition-colors"
                 />
               </div>
-              <p className="text-gray-600 text-xs mt-1">Enter in 07XX format — we'll convert it automatically</p>
+              <p className="text-gray-600 text-sm mt-1">Enter in 07XX format — we'll convert it automatically</p>
             </div>
 
             {/* Service Type */}
             <div>
-              <label className="text-sm text-gray-400 mb-3 block">Service Type</label>
+              <label className="text-sm text-gray-400 mb-2 block">Service Type</label>
+              <p className="text-gray-600 text-sm mb-1">Choose one or both</p>
               <div className="flex gap-3">
                 {['transport', 'delivery'].map((s) => (
                   <button
@@ -338,21 +339,6 @@ export default function ProfileSetup() {
                 </select>
               </div>
             </div>
-
-            {/* Custom hours input */}
-            {form.working_hours === 'Custom' && (
-              <div>
-                <label className="text-sm text-gray-400 mb-2 block">Specify Hours</label>
-                <input
-                  type="text"
-                  name="custom_hours"
-                  value={form.custom_hours}
-                  onChange={handleChange}
-                  placeholder="e.g. 9am - 5pm"
-                  className="w-full bg-[#2A2A2A] border border-[#3A3A3A] rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-[#FF5500] transition-colors"
-                />
-              </div>
-            )}
 
             <button
               type="button"

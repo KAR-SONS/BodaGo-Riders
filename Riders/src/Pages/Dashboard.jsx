@@ -271,7 +271,7 @@ export default function Dashboard() {
         {status === 'approved' && (
           <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-6 mb-6">
             <h3 className="font-bold text-lg mb-1 text-white">Subscription</h3>
-            <p className="text-gray-400 text-md mb-4">Ksh 100/month to stay listed on BodaGo</p>
+            <p className="text-gray-400 text-md mb-4 font-semibold">KSH 100/month to stay listed on BodaGo</p>
 
             {/* Active */}
             {rider?.subscription_status === 'active' && (
@@ -280,7 +280,7 @@ export default function Dashboard() {
                   <CheckCircle size={16} />
                   Subscription Active
                 </div>
-                <p className="text-green-400/70 text-xs">
+                <p className="text-green-400/70 text-sm">
                   Expires:{' '}
                   {new Date(rider.subscription_expires_at).toLocaleDateString('en-KE', {
                     day: 'numeric', month: 'long', year: 'numeric',
@@ -297,7 +297,7 @@ export default function Dashboard() {
                   No Active Subscription
                 </div>
                 <p className="text-yellow-400/70 text-sm">
-                  Pay Ksh 100 to get listed and start receiving customers
+                  Pay KSH 100 to get listed and start receiving customers
                 </p>
               </div>
             )}
@@ -341,7 +341,7 @@ export default function Dashboard() {
             <p className="text-gray-400 text-xs mt-0.5">Contact BodaGo support</p>
           </div>
           <a
-            href="https://wa.me/254700000000"
+            href="https://wa.me/254700500431"
             className="flex items-center gap-2 bg-[#128C7E] hover:bg-[#0e7268] transition-colors px-4 py-2 rounded-xl text-sm font-semibold"
           >
             WhatsApp Us

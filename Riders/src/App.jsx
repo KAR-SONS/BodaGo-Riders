@@ -8,6 +8,7 @@ import { AuthProvider,useAuth } from './context/AuthContext'
 import Login from './Pages/Login'
 import AdminLogin from './Pages/AdminLogin'
 import AdminPanel from './Pages/AdminPanel'
+import { Navigate } from 'react-router-dom'
 
 const App = () => {
   function ProtectedRoute({ children }) {

@@ -17,7 +17,7 @@ export default function Footer() {
 
         <div className="flex gap-6 text-sm text-gray-400">
           <Link to="/signup" className="hover:text-white transition-colors">Join as Rider</Link>
-          <a href="https://wa.me/254700000000" className="hover:text-white transition-colors">Contact</a>
+          <a href="https://wa.me/254700500431" className="hover:text-white transition-colors">Contact</a>
         </div>
       </div>
     </footer>

@@ -23,6 +23,8 @@ const FEATURES = [
   { icon: MapPin, title: 'Nationwide', desc: 'Available across multiple counties in Kenya' },
 ]
 
+const APK_DOWNLOAD_LINK = import.meta.env.VITE_APK_DOWNLOAD_LINK // Replace with your actual APK download link
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#111111] text-white">
@@ -49,7 +51,7 @@ export default function Home() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <a
-            href="YOUR_APK_DOWNLOAD_LINK"
+            href={APK_DOWNLOAD_LINK}
             className="flex items-center gap-3 bg-[#FF5500] hover:bg-[#E04A00] transition-colors px-8 py-4 rounded-xl font-bold text-lg"
           >
             <Download size={22} />
@@ -130,7 +132,7 @@ export default function Home() {
             <p className="text-gray-400 text-sm">Download the BodaGo app and get moving</p>
           </div>
           <a
-            href="YOUR_APK_DOWNLOAD_LINK"
+            href={APK_DOWNLOAD_LINK}
             className="flex items-center gap-3 bg-[#FF5500] hover:bg-[#E04A00] transition-colors px-6 py-3 rounded-xl font-bold whitespace-nowrap"
           >
             <Download size={18} />
@@ -190,7 +192,7 @@ export default function Home() {
               Call Us
             </a>
             <a
-              href="https://wa.me/254700000000"
+              href="https://wa.me/254700500431"
               className="flex items-center justify-center gap-3 bg-[#128C7E] hover:bg-[#0e7268] transition-colors px-6 py-3 rounded-xl font-semibold"
             >
               <MessageCircle size={18} />
